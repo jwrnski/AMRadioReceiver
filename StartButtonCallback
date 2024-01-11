@@ -1,0 +1,35 @@
+% Button pushed function: StartButton
+        function StartButtonPushed(app, event)
+            simulinkModel = 'AMRadioReceiver';
+            in = Simulink.SimulationInput(simulinkModel);
+            % tutaj próbowałem pobrać wartość z tego bloku Capacitor
+            % żeby wjebać na ten suwak jako wartość bazową
+            % a potem ewentualnie ją zamieniać, ale to nie działa
+            % być może trzeba utworzyć osobny callback dla tego suwaka,
+            % żeby pobierał wartość i je jakoś przesyłał do tego modelu
+            %path = [simulinkModel, '/Cres'];
+            %capacitance = get_param(path, 'Slope');
+            %app.Label.Text = capacitance;
+            %in = in.setVariable('Cres', capacitance);
+          
+            simOut = sim(simulinkModel);
+            % tutaj po prostu pobiera te dwie wartości i plotuje
+            % w modelu simulink dodałem przed scope blok simout na linii
+            % output
+            time = simout.time;
+            value = simout.signals.values;
+            plot(app.UIAxes, time, value);
+
+
+
+            % open_system(simulinkModel);
+            % allBlocks = find_system(simulinkModel, 'Type', 'Block');
+            % scopeBlocks = find_system(allBlocks, 'BlockType', 'Scope');
+            % if ~isempty(scopeBlocks)
+            %     open_system(scopeBlocks{1});
+            % else
+            %     disp('No scope block found in the model.');
+            % end
+
+        end
+    end
